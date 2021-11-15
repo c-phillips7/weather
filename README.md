@@ -1,8 +1,14 @@
-# weather
+# Weather Forecast
 
-API key
-021317329977ca6d14196271d5be63a3
+In this assignment, a weather outlook app was created using js according to the assignment below using OpenWeather API. The app is very much a MVP as issues arrose with the style.css not loading on live page.
 
+The page, however, does meet the baseline acceptance criteria.
+
+
+# Links
+Live Page: https://c-phillips7.github.io/weather/ \
+GitHub Repo:https://github.com/c-phillips7/weather/ \
+Weather API: https://openweathermap.org/api/ \
 
 The assignment:
 # 06 Server-Side APIs: Weather Dashboard
