@@ -1,0 +1,11 @@
+header{
+    height: 10vh;
+    width: 80%;
+    margin: 1em;
+    padding: 1em;
+}
+
+.headerText {
+    text-align: center;
+    align-items: center;
+}
