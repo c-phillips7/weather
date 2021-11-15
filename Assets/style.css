@@ -1,11 +1,17 @@
-header{
-    height: 10vh;
-    width: 80%;
-    margin: 1em;
-    padding: 1em;
+
+/* not loading on live page for some reason */
+:root {
+    background-color: red;
 }
 
-.headerText {
-    text-align: center;
-    align-items: center;
+.uv-green {
+    background-color: green;
+}
+
+.uv-yellow {
+    background-color: yellow;
+}
+
+.uv-red {
+    background-color: red;
 }
