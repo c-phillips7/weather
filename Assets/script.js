@@ -1,20 +1,32 @@
 
-var searchBar = $("<h2>").text("Search for a City").addClass("searchBar");
+var searchBar = $("<h2>").text("Search for a City").addClass("searchBar").css("text-align", "center");
 var userInput = $("<input>").attr("type", "text").addClass("w-100");
 var searchBtn= $("<button>").text("Search").attr("type", "submit").addClass("search-btn w-100");
-
-// Creating divs
-var sidebarSearch = $("<div>").addClass("sidebar-search").append(searchBar, userInput, searchBtn);
-var sidebarResults = $("<div>").addClass("sidebar-results");
-var sidebar = $("<div>").addClass("column col-3 sidebar").append(sidebarSearch).append(sidebarResults);
-
 
 // Changeable variables
 let myCity = "New York"
 let days = [1, 2, 3, 4, 5]
 let cities =  []
 
+// Generate header
+var forecastHeader =$("<h2>").text("5-day Forecast:").addClass("forecast-header")
+var headerText = $("<h1>").addClass("headerText").text("Weather Dashboard").css("text-align", "center");
+var header = $("header").addClass("header").css("padding", "1em");
+$("header").append(headerText);
 
+// Creating divs for sidebar
+var sidebarSearch = $("<div>").addClass("sidebar-search").append(searchBar, userInput, searchBtn);
+var sidebarResults = $("<div>").addClass("sidebar-results");
+var sidebar = $("<div>").addClass("column col-3 sidebar").append(sidebarSearch).append(sidebarResults);
+
+// creating divs for todays weather and 5 day forecast
+var future = $("<div>").addClass("future");
+var currentContainer = $("<div>");
+var conditionsContainer = $("<div>").addClass("flex-column col-8 conditions-container").append(currentContainer, forecastHeader, future);
+var row = $("<div>").addClass("row main-container").append(sidebar, conditionsContainer);
+$("body").append(row);
+
+// Call api to generate JSON
 fetchData = (city) => {
     // First find cities lon and lat
     var cityApi = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"&limit=1&appid=021317329977ca6d14196271d5be63a3"
@@ -56,7 +68,7 @@ searchHistory = JSON.parse(localStorage.getItem("searchHistory"))
 if (searchHistory){
     cities = searchHistory
     for (var i=0; i<cities.length; i++) {
-        var oldCity = cities[isSecureContext]
+        var oldCity = cities[i];
         generatePastSearchBtn(oldCity)
     }
 }
@@ -108,20 +120,12 @@ generateForecast = (data) => {
     }
 }
 
-// Set to display default city
+// Run fetchData for default (where I live)
 fetchData(myCity)
 
-var forecastHeader =$("<h2>").text("5-day Forecast:").addClass("forecast-header")
-var future = $("<div>").addClass("future");
-var currentContainer = $("<div>")
-var conditionsContainer = $("<div>").addClass("flex-column col-8 conditions-container").append(currentContainer, forecastHeader, future);
-var headerText = $("<h1>").addClass("headerText").text("Weather Dashboard");
-var header = $("header").addClass("header");
-$("header").append(headerText);
-var row = $("<div>").addClass("row main-container").append(sidebar, conditionsContainer);
-$("body").append(row)
 
-// Update Weather Icons
+
+// Update Weather Icons based on response from api
 updateIcons = (icon, weather) => {
     if (weather=== "Clouds") {
         $(icon).html("<img src=http://openweathermap.org/img/w/03d.png>")
@@ -146,7 +150,10 @@ generateCurrentWeather = (data, city) => {
     var fTempCurrent = (1.8*(data.current.temp -273)+32).toFixed(2);
     var humidityCurrent = data.current.humidity;
     var windCurrent = data.current.wind_speed;
+    // console.log(data.current.wind_speed);
     var currentUv = data.current.uvi;
+    // console.log(data.current.uvi);
+    // Side note: for a long time I thought this was broken as it retuned only zero, until I realized I was working at night...
     var currentIcon = $("<i>");
     var currentWeather = data.current.weather[0].main;
 
@@ -155,6 +162,7 @@ generateCurrentWeather = (data, city) => {
     var currentWind = $("<li>").text("Wind: "+windCurrent+" MPH");
     var currentHumidity = $("<li>").text("Humidity: "+humidityCurrent+"%");
     var uvSpan = $("<span>").text(currentUv);
+    var displayUv = $("<li>").text("UV Index: ").append(uvSpan)
     // Color code UV
     if (currentUv<2.01) {
         $(uvSpan).addClass("uv-green")
@@ -169,7 +177,7 @@ generateCurrentWeather = (data, city) => {
     updateIcons(currentIcon, currentWeather);
 
     // append to html (done out of order so prepended to main container)
-    var currentUl = $("<ul>").addClass("current-ul").append(currentTemp, currentWind, currentHumidity, currentUv);
+    var currentUl = $("<ul>").addClass("current-ul").append(currentTemp, currentWind, currentHumidity, displayUv);
     var currentHeader = $("<h2>").addClass("current-header").text(city + " (" +moment().format('L')+") ").append(currentIcon);
     var currentDiv = $("<div>").addClass("current").append(currentHeader, currentUl);
     $(currentContainer).prepend(currentDiv)
@@ -177,4 +185,6 @@ generateCurrentWeather = (data, city) => {
         submitBtnHandler()
     });
 
+
+    
 }
