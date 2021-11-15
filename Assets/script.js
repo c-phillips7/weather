@@ -165,13 +165,13 @@ generateCurrentWeather = (data, city) => {
     var displayUv = $("<li>").text("UV Index: ").append(uvSpan)
     // Color code UV
     if (currentUv<2.01) {
-        $(uvSpan).addClass("uv-green")
+        $(uvSpan).addClass("uv-green").css("background-color", "green")
     }
     else if (currentUv<7) {
-        $(uvSpan).addClass("uv-yellow")
+        $(uvSpan).addClass("uv-yellow")("background-color", "yellow")
     }
     else {
-        $(uvSpan).addClass("uv-red")
+        $(uvSpan).addClass("uv-red").css("background-color", "red")
     }
     // Set icons by current weather
     updateIcons(currentIcon, currentWeather);
